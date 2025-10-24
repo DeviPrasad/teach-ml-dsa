@@ -6,3 +6,15 @@ mod ntt;
 fn main() {
     let _ = keypair::key_gen().unwrap();
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::keypair;
+
+    #[test]
+    fn dry_2k_keygen_test() {
+        for _ in 0..2048 {
+            let _ = keypair::key_gen().unwrap();
+        }
+    }
+}
