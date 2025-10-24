@@ -1,0 +1,10 @@
+[package]
+name = "ml-dsa-44"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+env_logger = "0.11.8"
+getrandom = "0.3.4"
+sha3 = "0.11.0-rc.3"
+hex = "0.4.3"
