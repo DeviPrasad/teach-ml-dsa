@@ -6,15 +6,14 @@ use sha3::digest::{ExtendableOutput, Update, XofReader};
 use sha3::Shake256;
 
 // https://github.com/post-quantum-cryptography/KAT/blob/main/MLDSA/kat_MLDSA_44_hedged_raw.rsp
-pub fn key_gen () -> Result<([u8; LEN_PUBLIC_KEY], [u8; LEN_PRIVATE_KEY]), MlDsaError>{
+pub fn key_gen() -> Result<([u8; LEN_PUBLIC_KEY], [u8; LEN_PRIVATE_KEY]), MlDsaError>{
     let mut xi = [0u8; 32];
     let _ = getrandom::fill(&mut xi)
         .map_err(|_| MlDsaError::KegGenRandomSeedError);
     Ok(key_gen_internal(&xi))
 }
 
-// fn key_gen_internal (seed: &[u8; 32]) -> ([[[i32; 256]; L]; K], [[i32; 256]; K]) {
-fn key_gen_internal (xi: &[u8; 32]) -> ([u8; LEN_PUBLIC_KEY], [u8; LEN_PRIVATE_KEY]) {
+fn key_gen_internal(xi: &[u8; 32]) -> ([u8; LEN_PUBLIC_KEY], [u8; LEN_PRIVATE_KEY]) {
     let mut rho = [0u8; 32];
     let mut rho_prime = [0u8; 64];
     let mut key = [0u8; 32];
@@ -59,6 +58,9 @@ fn key_gen_internal (xi: &[u8; 32]) -> ([u8; LEN_PUBLIC_KEY], [u8; LEN_PRIVATE_K
         }
         for j in 0..256 {
             assert!(t1[i][j] < 1024_i32);
+        }
+        for j in 0..256 {
+            assert!(t0[i][j] <= (1 << (D-1)));
         }
     }
 

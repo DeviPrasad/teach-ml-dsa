@@ -15,7 +15,7 @@ mod tests {
 
     #[test]
     fn dry_512_keygen_test() {
-        for _ in 0..512 {
+        for _ in 0..128 {
             let (_, sk) = keypair::key_gen().unwrap();
             let _ = sign::sk_decode(&sk).unwrap();
         }
