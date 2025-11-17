@@ -5,6 +5,8 @@ pub const BITLEN_Q_MINUS_1: usize = 23;  /* bitlen(q-1) = 23 because 23rd bit is
 pub const BITLEN_2_POW_D_MINUS_1: usize = 13; // (2^D-1) = 0b1111111111111, i.e., 13th bit is 1.
 
 
+
+
 #[cfg(feature = "ML_DSA_44")]
 pub const K: usize = 4;
 #[cfg(feature = "ML_DSA_44")]
@@ -13,7 +15,16 @@ pub const L: usize = 4;
 pub const ETA: u8 = 2;
 #[cfg(feature = "ML_DSA_44")]
 pub const BITLEN_2_ETA: usize = 3; // bitlen(2*2) = bitlen(b100) = 3
-
+#[cfg(feature = "ML_DSA_44")]
+pub const LAMBDA: i32 = 128; // collision strength of c-tilda
+#[cfg(feature = "ML_DSA_44")]
+pub const GAMMA1: i32 = 1 << 17; // coefficient range of y = 2^17
+#[cfg(feature = "ML_DSA_44")]
+pub const BITLEN_GAMMA1: usize = 18;
+#[cfg(feature = "ML_DSA_44")]
+pub const GAMMA2: i32 = (Q-1)/88; // low-order rounding range
+#[cfg(feature = "ML_DSA_44")]
+pub const OMEGA: usize = 80; // max-number of 1's in the hint h
 
 #[cfg(feature = "ML_DSA_65")]
 pub const K: usize = 6;
@@ -23,6 +34,17 @@ pub const L: usize = 5;
 pub const ETA: u8 = 4;
 #[cfg(any(feature = "ML_DSA_65"))]
 const BITLEN_2_ETA: usize = 4;  // bitlen(2*4) = bitlen(b1000) = 4
+#[cfg(feature = "ML_DSA_65")]
+pub const LAMBDA: i32 = 192; // collision strength of c-tilda
+#[cfg(feature = "ML_DSA_65")]
+pub const GAMMA1: i32 = 1 << 19; // coefficient range of y = 2^19
+#[cfg(feature = "ML_DSA_65")]
+pub const BITLEN_GAMMA1: usize = 20;
+#[cfg(feature = "ML_DSA_65")]
+pub const GAMMA2: i32 = (Q-1)/32; // low-order rounding range
+#[cfg(feature = "ML_DSA_65")]
+pub const OMEGA: i32 = 55; // max-number of 1's in the hint h
+
 
 #[cfg(feature = "ML_DSA_87")]
 pub const K: usize = 8;
@@ -32,9 +54,20 @@ pub const L: usize = 7;
 pub const ETA: u8 = 2;
 #[cfg(feature = "ML_DSA_87")]
 pub const BITLEN_2_ETA: usize = 3; // bitlen(2*2) = bitlen(b100) = 3
+#[cfg(feature = "ML_DSA_87")]
+pub const LAMBDA: i32 = 256; // collision strength of c-tilda
+#[cfg(feature = "ML_DSA_87")]
+pub const GAMMA1: i32 = 1 << 19; // coefficient range of y = 2^19
+#[cfg(feature = "ML_DSA_87")]
+pub const BITLEN_GAMMA1: usize = 20;
+#[cfg(feature = "ML_DSA_87")]
+pub const GAMMA2: i32 = (Q-1)/32; // low-order rounding range
+#[cfg(feature = "ML_DSA_87")]
+pub const OMEGA: i32 = 75; // max-number of 1's in the hint h
 
 
 pub const LEN_PUBLIC_KEY: usize = 32 + 32 * K * (BITLEN_Q_MINUS_1 - D);
 pub const LEN_PRIVATE_KEY: usize = 32 + 32 + 64 + 32 * ((K+L) * BITLEN_2_ETA + (D * K));
 pub const LEN_ETA_PACK_POLY: usize = 32 * BITLEN_2_ETA;
 pub const LEN_T0_PACK_POLY: usize = 32 * BITLEN_2_POW_D_MINUS_1; // which BTW, is same as 32 * D
+pub const SIG_LEN: usize = (LAMBDA as usize)/4 + L*32*(1+(BITLEN_GAMMA1-1))+OMEGA+K;

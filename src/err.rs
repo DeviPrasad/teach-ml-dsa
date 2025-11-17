@@ -4,15 +4,16 @@ use std::array::TryFromSliceError;
 #[repr(u16)]
 #[derive(Clone, Debug)]
 pub enum MlDsaError {
-    KegGenRandomSeedError,
-    NTTPolySampleError,
-    BoundedPolySampleError,
+    RandomSeedGenError,
+    BadNTTPolySample,
+    BadBoundedPolySample,
     MalformedShortVector,
-    MalformedVectorError,
+    MalformedVector,
+    SignCtxLenTooLong,
 }
 
 impl From<TryFromSliceError> for MlDsaError {
     fn from(_: TryFromSliceError) -> Self {
-        MlDsaError::MalformedVectorError
+        MlDsaError::MalformedVector
     }
 }

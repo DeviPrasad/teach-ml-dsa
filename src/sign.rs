@@ -1,6 +1,22 @@
 use crate::err::MlDsaError;
-use crate::params::{N, D, ETA, K, L, LEN_ETA_PACK_POLY, LEN_PRIVATE_KEY, LEN_T0_PACK_POLY};
+use crate::params::{N, D, ETA, K, L, LEN_ETA_PACK_POLY, LEN_PRIVATE_KEY, LEN_T0_PACK_POLY, SIG_LEN};
 
+pub fn sign(sk: &[u8; LEN_PRIVATE_KEY], m: &[u8], ctx: &[u8]) -> Result<[u8; SIG_LEN], MlDsaError> {
+    if ctx.len() > 255 {
+        return  Err(MlDsaError::SignCtxLenTooLong)
+    }
+    let mut rnd = [0u8; 32];
+    #[cfg(feature="HEDGED")]
+    let _ = getrandom::fill(&mut rnd)
+        .map_err(|_| MlDsaError::RandomSeedGenError);
+    let md = [&[0u8, ctx.len() as u8], ctx, m].concat();
+    sign_internal(sk, &md, &rnd)
+}
+
+pub fn sign_internal(sk: &[u8; LEN_PRIVATE_KEY], m: &[u8], rnd: &[u8]) -> Result<[u8; SIG_LEN], MlDsaError> {
+    let sig = [0u8; SIG_LEN];
+    Ok(sig)
+}
 pub fn sk_decode(sk: &[u8; LEN_PRIVATE_KEY]) -> Result<([u8; 32], [u8; 32], [u8; 64], [[i32; 256]; L], [[i32; 256]; K], [[i32; 256]; K]), MlDsaError> {
     assert_eq!(sk.len(), 128 + L * LEN_ETA_PACK_POLY + K * LEN_ETA_PACK_POLY + K * LEN_T0_PACK_POLY);
     let rho = sk[0..32].try_into()?;

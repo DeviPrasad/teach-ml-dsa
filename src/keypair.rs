@@ -9,7 +9,7 @@ use sha3::Shake256;
 pub fn key_gen() -> Result<([u8; LEN_PUBLIC_KEY], [u8; LEN_PRIVATE_KEY]), MlDsaError>{
     let mut xi = [0u8; 32];
     let _ = getrandom::fill(&mut xi)
-        .map_err(|_| MlDsaError::KegGenRandomSeedError);
+        .map_err(|_| MlDsaError::RandomSeedGenError);
     Ok(key_gen_internal(&xi))
 }
 
@@ -302,14 +302,14 @@ fn coefficient_from_half_byte(b: u8) -> Result<i8, MlDsaError> {
     if b < 15 {
         Ok(2 - MOD5[(b & 0x0F) as usize])
     } else {
-        Err(MlDsaError::BoundedPolySampleError)
+        Err(MlDsaError::BadBoundedPolySample)
     }
 
     #[cfg(feature = "ML_DSA_65")]
     if b < 9 {
         Ok(4 - b as i8)
     } else {
-        Err(MlDsaError::BoundedPolySampleError)
+        Err(MlDsaError::BadBoundedPolySample)
     }
 }
 
@@ -320,7 +320,7 @@ fn coefficient_from_three_bytes(b0: u8, b1: u8, b2: u8) -> Result<i32, MlDsaErro
     if z < Q {
         Ok(z)
     } else {
-        Err(MlDsaError::NTTPolySampleError)
+        Err(MlDsaError::BadNTTPolySample)
     }
 }
 
