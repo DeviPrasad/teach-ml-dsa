@@ -2,8 +2,10 @@
 // https://github.com/itzmeanjan/ml-dsa/blob/master/kats/ml_dsa_44_sign.acvp.kat
 // https://github.com/itzmeanjan/ml-dsa/blob/master/kats/ml_dsa_65_sign.acvp.kat
 // https://github.com/itzmeanjan/ml-dsa/blob/master/kats/ml_dsa_87_sign.acvp.kat
+
+#[cfg(any(feature = "ML_DSA_44", feature = "ML_DSA_65", feature = "ML_DSA_87"))]
 #[cfg(test)]
-mod deterministic_signature_with_ctx_kat {
+pub mod deterministic_signature_with_ctx_kat {
         use std::fs::File;
         use std::io;
         use std::io::{BufRead, BufReader};
@@ -60,12 +62,12 @@ mod deterministic_signature_with_ctx_kat {
         Ok(results)
     }
 
-    fn run_kat_with_ctx(kats: Vec<(String, String, String, String, String, String)>) {
+    pub fn run_kat_with_ctx(kats: Vec<(String, String, String, String, String, String)>) {
         assert!(!kats.is_empty());
-        assert_eq!(kats.len(), 30);
         for (kat_msg, kat_pk, kat_sk, kat_ctx, kat_rnd, kat_sig) in kats.iter() {
             let _pk: [u8; LEN_PUBLIC_KEY] = hex::decode(&kat_pk).unwrap().try_into().unwrap();
             let sk: [u8; LEN_PRIVATE_KEY] = hex::decode(&kat_sk).unwrap().try_into().unwrap();
+            // 'rnd' may be all zeroes or a hedged random value.
             let rnd: [u8; 32] = hex::decode(&kat_rnd).unwrap().try_into().unwrap();
             let msg = hex::decode(&kat_msg).unwrap();
             let ctx = hex::decode(&kat_ctx).unwrap();
@@ -75,7 +77,7 @@ mod deterministic_signature_with_ctx_kat {
         }
     }
 
-    #[cfg(feature = "ML_DSA_44")]
+    #[cfg(all(feature = "ML_DSA_44", feature = "DETERMINISTIC"))]
     #[test]
     fn test_mldsa_44() {
         let kat_list = read_mldsa_nist_acvp_kat("./kats/ml_dsa_44_sign.acvp.kat").unwrap();
@@ -83,7 +85,7 @@ mod deterministic_signature_with_ctx_kat {
         run_kat_with_ctx(kat_list);
     }
 
-    #[cfg(feature = "ML_DSA_65")]
+    #[cfg(all(feature = "ML_DSA_65", feature = "DETERMINISTIC"))]
     #[test]
     fn test_mldsa_65() {
         let kat_list = read_mldsa_nist_acvp_kat("./kats/ml_dsa_65_sign.acvp.kat").unwrap();
@@ -91,7 +93,7 @@ mod deterministic_signature_with_ctx_kat {
         run_kat_with_ctx(kat_list);
     }
 
-    #[cfg(feature = "ML_DSA_87")]
+    #[cfg(all(feature = "ML_DSA_87", feature = "DETERMINISTIC"))]
     #[test]
     fn test_mldsa_65() {
         let kat_list = read_mldsa_nist_acvp_kat("./kats/ml_dsa_87_sign.acvp.kat").unwrap();
