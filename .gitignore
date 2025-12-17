@@ -5,4 +5,5 @@ target
 out
 temp
 scrap
+*.log
 
