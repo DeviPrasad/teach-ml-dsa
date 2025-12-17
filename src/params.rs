@@ -1,6 +1,7 @@
 pub const N: usize = 256;
 pub const Q: i32 = 8380417; // 2^23 - 2^13 + 1
 pub const D: usize = 13;
+pub const ZETA: i32 = 1753;
 pub const BITLEN_Q_MINUS_1: usize = 23;  /* bitlen(q-1) = 23 because 23rd bit is high in (q-1) */
 pub const BITLEN_2_POW_D_MINUS_1: usize = 13; // (2^D-1) = 0b1111111111111, i.e., 13th bit is 1.
 
