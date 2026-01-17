@@ -13,25 +13,42 @@
 Number Theoretic Transforms (NTTs) are integral to the ML DSA specification. The NTT representation enables efficient polynomial addition, subtraction, and multiplication. In this section, we develop all the key ideas behind NTTs in a step-by-step fashion. To illustrate these concepts, we define *Tiny DSA*, a simplified system that follows the ML-DSA structure. This development draws heavily from Prof. Alfred Menezes' excellent notes and videos.
 
 ## Polynomial Reduction
-Let $a(x) \in R_q$ be a polynomial of degree $\le$ 31. We can reorganize the terms in $a(x)$ into two distinct polynomials. The first polynomial, $a_L(x)$, contains terms with degree $0 \le d \le 15$:
+Let $a(x) \in R_q$ be a polynomial of degree $\le$ 31.
 $$
-    {\color{NavyBlue}{\mathbf{a_L(x)}}} = a_0 + a_1 x + a_2 x^2 + \ldots + a_{15} x^{15} \in R_q
+    a(x) = a_0 + a_1 x + a_2 x^2 + \ldots + a_{15} x^{15} +  a_{16} x^{16} + \ldots + a_{30} x^{30} + a_{31} x^{31}\in R_q
+$$
+
+We can reorganize the terms in $a(x)$ into two distinct polynomials. The first polynomial, $a_L(x)$, contains terms with degree $0 \le d \le 15$:
+$$
+    {\color{NavyBlue}{\mathbf{a_L(x)}}} = a_0 + a_1 x + a_2 x^2 + \ldots + a_{14} x^{14} + a_{15} x^{15} \in R_q
 $$
 
 The second polynomial, $a_r(x)$ has terms with degree $16 \le d \le 31$:
 $$
 \begin{array}{lll}
-    a_r(x) & = & a_{16}x^{16} + a_{17} x^{17} + a_{18} x^{18} + \ldots + a_{31} x^{31} \in R_q \\
-           & = & (a_{16} x + a_{17} x^{1} + a_{18} x^{2} + \ldots + a_{31} x^{15}) x^{16} \in R_q \\
-           & = & {\color{NavyBlue}{\mathbf{a_R(x)}}} x^{16} \in R_q \ \ \ where \ {\color{NavyBlue}{\mathbf{a_R(x)}}} = (a_{16} x + a_{17} x^{1} + \ldots + a_{31} x^{15}) x^{16} \\
+    a_r(x) & = & a_{16}x^{16} + a_{17} x^{17} + a_{18} x^{18} + \ldots + a_{31} x^{31} \\
+           & = & (a_{16} + a_{17} x + a_{18} x^{2} + \ldots + a_{30} x^{14} + a_{31} x^{15}) x^{16} \\
+           & = & {\color{NavyBlue}{\mathbf{a_R(x)}}} x^{16} \ \ where \ {\color{NavyBlue}{\mathbf{a_R(x)}}} = (a_{16}+ a_{17} x + \ldots + a_{30} x^{14} + a_{31} x^{15}) \in R_q \\
 \end{array}
 $$
 
-We use this method to repeatedly decompose a polynomial $a(x) \in R_q$ of degree $2n$ into two sub-polynomials each of degree $d$. We stop reducing when we reach factors of degree 1.
+In general, for any $a(x) \in R_q$, we can write
+$$
+    a(x) = a_L(x) + a_R(x)x^{16} \ \ where \ a_L(x) \ and \ a_R(x) \ have \ degree \le 15.
+$$
 
+We use this method to decompose a polynomial $a(x) \in R_q$ of degree $2d + 1$ into two sub-polynomials each of degree $d$. Once the polynomial is in this form, notice that
 $$
-    a(x) = a_L(x) + a_R(x)x^{16} \ \ \ \ a_L(x) \in R_q, \ a_R(x) \in R_q, \ a_L(x) \ \text{and} \ a_R(x) \ \text{have  degree} \le \text{15}.
+\begin{array}{lll}
+    a(x) \ \text{mod} \ (x^{32}+1) & = & (a_L(x) + a_R(x)x^{16}) \ \text{mod} \ (x^{32}+1).\\
+                                & = & a_L(x) + a_R(x)x^{16} \ \text{mod} \ (x^{32} - \zeta^{32}).\\
+                                & = & a_L(x) + a_R(x)x^{16} \ \text{mod} \ (x^{16} - \zeta^{16}) (x^{16} + \zeta^{16}).\\
+\end{array}
 $$
+
+
+
+We stop reducing when we reach factors of degree 1.
 
 ## Tiny DSA - Factoring the Reduction Polynomial $x^{32} + 1$
 In this section we derive the irreducible factors of the reduction polynomial $x^{32} + 1$.

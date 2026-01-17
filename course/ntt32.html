@@ -133,37 +133,52 @@ Prof. Alfred Menezes’ excellent notes and videos.</p>
 <h2 data-number="1.1" id="polynomial-reduction"><span
 class="header-section-number">1.1</span> Polynomial Reduction</h2>
 <p>Let <span class="math inline">\(a(x) \in R_q\)</span> be a polynomial
-of degree <span class="math inline">\(\le\)</span> 31. We can reorganize
-the terms in <span class="math inline">\(a(x)\)</span> into two distinct
-polynomials. The first polynomial, <span
-class="math inline">\(a_L(x)\)</span>, contains terms with degree <span
-class="math inline">\(0 \le d \le 15\)</span>: <span
+of degree <span class="math inline">\(\le\)</span> 31. <span
 class="math display">\[
+    a(x) = a_0 + a_1 x + a_2 x^2 + \ldots + a_{15} x^{15} +  a_{16}
+x^{16} + \ldots + a_{30} x^{30} + a_{31} x^{31}\in R_q
+\]</span></p>
+<p>We can reorganize the terms in <span
+class="math inline">\(a(x)\)</span> into two distinct polynomials. The
+first polynomial, <span class="math inline">\(a_L(x)\)</span>, contains
+terms with degree <span class="math inline">\(0 \le d \le 15\)</span>:
+<span class="math display">\[
     {\color{NavyBlue}{\mathbf{a_L(x)}}} = a_0 + a_1 x + a_2 x^2 + \ldots
-+ a_{15} x^{15} \in R_q
++ a_{14} x^{14} + a_{15} x^{15} \in R_q
 \]</span></p>
 <p>The second polynomial, <span class="math inline">\(a_r(x)\)</span>
 has terms with degree <span class="math inline">\(16 \le d \le
 31\)</span>: <span class="math display">\[
 \begin{array}{lll}
     a_r(x) &amp; = &amp; a_{16}x^{16} + a_{17} x^{17} + a_{18} x^{18} +
-\ldots + a_{31} x^{31} \in R_q \\
-           &amp; = &amp; (a_{16} x + a_{17} x^{1} + a_{18} x^{2} +
-\ldots + a_{31} x^{15}) x^{16} \in R_q \\
-           &amp; = &amp; {\color{NavyBlue}{\mathbf{a_R(x)}}} x^{16} \in
-R_q \ \ \ where \ {\color{NavyBlue}{\mathbf{a_R(x)}}} = (a_{16} x +
-a_{17} x^{1} + \ldots + a_{31} x^{15}) x^{16} \\
+\ldots + a_{31} x^{31} \\
+           &amp; = &amp; (a_{16} + a_{17} x + a_{18} x^{2} + \ldots +
+a_{30} x^{14} + a_{31} x^{15}) x^{16} \\
+           &amp; = &amp; {\color{NavyBlue}{\mathbf{a_R(x)}}} x^{16} \ \
+where \ {\color{NavyBlue}{\mathbf{a_R(x)}}} = (a_{16}+ a_{17} x + \ldots
++ a_{30} x^{14} + a_{31} x^{15}) \in R_q \\
 \end{array}
 \]</span></p>
-<p>We use this method to repeatedly decompose a polynomial <span
-class="math inline">\(a(x) \in R_q\)</span> of degree <span
-class="math inline">\(2n\)</span> into two sub-polynomials each of
-degree <span class="math inline">\(d\)</span>. We stop reducing when we
-reach factors of degree 1.</p>
-<p><span class="math display">\[
-    a(x) = a_L(x) + a_R(x)x^{16} \ \ \ \ a_L(x) \in R_q, \ a_R(x) \in
-R_q, \ a_L(x) \ \text{and} \ a_R(x) \ \text{have  degree} \le \text{15}.
+<p>In general, for any <span class="math inline">\(a(x) \in
+R_q\)</span>, we can write <span class="math display">\[
+    a(x) = a_L(x) + a_R(x)x^{16} \ \ where \ a_L(x) \ and \ a_R(x) \
+have \ degree \le 15.
 \]</span></p>
+<p>We use this method to decompose a polynomial <span
+class="math inline">\(a(x) \in R_q\)</span> of degree <span
+class="math inline">\(2d + 1\)</span> into two sub-polynomials each of
+degree <span class="math inline">\(d\)</span>. Once the polynomial is in
+this form, notice that <span class="math display">\[
+\begin{array}{lll}
+    a(x) \ \text{mod} \ (x^{32}+1) &amp; = &amp; (a_L(x) + a_R(x)x^{16})
+\ \text{mod} \ (x^{32}+1).\\
+                                &amp; = &amp; a_L(x) + a_R(x)x^{16} \
+\text{mod} \ (x^{32} - \zeta^{32}).\\
+                                &amp; = &amp; a_L(x) + a_R(x)x^{16} \
+\text{mod} \ (x^{16} - \zeta^{16}) (x^{16} + \zeta^{16}).\\
+\end{array}
+\]</span></p>
+<p>We stop reducing when we reach factors of degree 1.</p>
 <h2 data-number="1.2"
 id="tiny-dsa---factoring-the-reduction-polynomial-x32-1"><span
 class="header-section-number">1.2</span> Tiny DSA - Factoring the
